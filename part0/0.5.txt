@@ -1,0 +1,10 @@
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+server->browser: HTML
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes.css
+server->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server->browser: main.js
+note over browser: main.js tells browser to request JSON data from the server
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server->browser: JSON data
+note over browser: browser uses main.js to display notes on the page

@@ -1,0 +1,5 @@
+note over browser: main.js prevents defaul behaviour and sends POST request to server
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over server: server uses JSON from POST data to add the new note
+server->browser: 201 Created
+note over browser: browser uses main.js to display the new note on the current page
