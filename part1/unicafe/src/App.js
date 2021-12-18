@@ -13,6 +13,13 @@ const Value = ({type, name}) => <p>{name} {type}</p>
 
 const Statistics = ({good, bad, neutral}) => {
   let total = good+neutral+bad
+
+  if(total === 0) {
+    return (
+      <p>No Feeback Yet</p>
+    )
+  }
+
   return (
     <div>
       <Value name="Good" type={good} />
