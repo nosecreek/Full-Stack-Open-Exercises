@@ -9,16 +9,28 @@ const Button = ({text, handleClick}) => {
   )
 }
 
-const Statistics = ({type, name}) => <p>{name} {type}</p>
+const Value = ({type, name}) => <p>{name} {type}</p>
+
+const Statistics = ({good, bad, neutral}) => {
+  let total = good+neutral+bad
+  return (
+    <div>
+      <Value name="Good" type={good} />
+      <Value name="Neutral" type={neutral} />
+      <Value name="Bad" type={bad} />
+      <Value name="All" type={total} />
+      <Value name="Average" type={(good-bad)/total} />
+      <Value name="Positive" type={(good/total)*100 + "%"} />
+    </div>
+  )
+}
 
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-
-  let total = good+neutral+bad
-
+  
   return (
     <div>
       <Title name="Give Feeback" />
@@ -26,12 +38,7 @@ const App = () => {
       <Button text="Neutral" handleClick={() => setNeutral(neutral+1)} />
       <Button text="Bad" handleClick={() => setBad(bad+1)} />
       <Title name="Statistics" />
-      <Statistics name="Good" type={good} />
-      <Statistics name="Neutral" type={neutral} />
-      <Statistics name="Bad" type={bad} />
-      <Statistics name="All" type={total} />
-      <Statistics name="Average" type={(good-bad)/total} />
-      <Statistics name="Positive" type={(good/total)*100 + "%"} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
