@@ -17,18 +17,32 @@ const App = () => {
 
   const [points, setPoints] = useState(Array(anecdotes.length).fill(0))
   
+  let largestVote = 0
+  let largestIndex = 0
+  
   const Vote = () => {
     let newPoints = {...points}
     newPoints[selected] += 1
     setPoints(newPoints)
   }
   
+  //calculate the most votes
+  for(let x in points) {
+    if(points[x] > largestVote) {
+      largestVote = points[x]
+      largestIndex = x
+    }
+  }
+
   return (
     <div>
+      <h2>Annecdote of the day</h2>
       <p>{anecdotes[selected]}</p>
       <p>Has {points[selected]} Votes</p>
       <Button text="Vote" handleClick={() => Vote()} />
       <Button text="Next Anecdote" handleClick={() => setSelected(Math.floor(Math.random() * anecdotes.length))} />
+      <h2>Annecdote with the most votes</h2>
+      <p>{anecdotes[largestIndex]}</p>
     </div>
   )
 }
