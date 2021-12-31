@@ -14,6 +14,28 @@ const Persons = ({persons, search}) => {
   )
 }
 
+const Filter = ({value, onChange}) => {
+  return (
+    <p>Filter shown with <input value={value} onChange={onChange} /></p>
+  )
+}
+
+const PersonForm = (props) => {
+  return (
+    <form onSubmit={props.submitHandler}>
+      <div>
+        name: <input value={props.newName} onChange={props.handleNameChange} />
+      </div>
+      <div>
+        phone: <input value={props.newPhone} onChange={props.handlePhoneChange} />
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', phone: "040-123456" },
@@ -35,7 +57,7 @@ const App = () => {
 
     setPersons(persons.concat({"name": newName, "phone": newPhone}))
     setNewName('')
-    setNewPhome('')
+    setNewPhone('')
   }
 
   const handleNameChange = (event) => {
@@ -53,19 +75,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-        <p>Filter shown with <input value={searchInput} onChange={handleSearchChange} /></p>
+      <Filter value={searchInput} onChange={handleSearchChange} />
+        
       <h2>Add New</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          phone: <input value={newPhone} onChange={handlePhoneChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm submitHandler={addPerson} newName={newName} newPhone={newPhone} handleNameChange={handleNameChange} handlePhoneChange={handlePhoneChange} />
+      
       <h2>Numbers</h2>
       <Persons persons={persons} search={searchInput} />
     </div>
