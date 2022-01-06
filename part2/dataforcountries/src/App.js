@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const Country = ({country}) => {
+const Country = ({country, searchChange}) => {
   return (
-    <p>{country.name.common}</p>
+    <p>{country.name.common} <button onClick={searchChange} value={country.name.common}>show</button></p>
   )
 }
 
-const Results = ({countries, search}) => {
+const Results = ({countries, search, searchChange}) => {
   //console.log("country",countries[0].name.common)
   const countriesToShow = search ? countries.filter(country => country.name.common.toLowerCase().indexOf(search.toLowerCase()) !== -1) : []
   
@@ -34,7 +34,7 @@ const Results = ({countries, search}) => {
   
   return (
     <div>
-      {countriesToShow.map(country => <Country country={country} key={country.name.common} />)}
+      {countriesToShow.map(country => <Country country={country} searchChange={searchChange} key={country.name.common} />)}
     </div>
   )
 }
@@ -80,7 +80,7 @@ const App = () => {
   return (
     <div>
       <Search value={searchInput} onChange={handleSearchChange} />
-      <Results countries={countries} search={searchInput} />
+      <Results countries={countries} search={searchInput} searchChange={handleSearchChange} />
     </div>
   )
 }
