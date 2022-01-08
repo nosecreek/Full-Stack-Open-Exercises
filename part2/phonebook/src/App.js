@@ -38,11 +38,26 @@ const PersonForm = (props) => {
   )
 }
 
+const Notification  = ({ message, error = true }) => {
+  if (message === null) {
+    return null
+  }
+
+  const className = error ? 'error' : 'message'
+  return (
+    <div className={className}>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [searchInput, setSearchInput] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [errorState, setErrorState] = useState(true)
   
   useEffect(() => {
     personsService
@@ -62,8 +77,13 @@ const App = () => {
           .update(id, {"name": newName, "number": newPhone})
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+            setErrorMessage(`Updated ${newName}`)
+            setErrorState(false)
             setNewName('')
             setNewPhone('')
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
           })
       }
       return
@@ -73,8 +93,13 @@ const App = () => {
       .create({"name": newName, "number": newPhone})
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
+        setErrorMessage(`Added ${newName}`)
+        setErrorState(false)
         setNewName('')
         setNewPhone('')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
   }
 
@@ -95,12 +120,20 @@ const App = () => {
     if(window.confirm(`Delete ${name}?`)) {
       personsService
         .deletePerson(id)
-        .then(response => setPersons(persons.filter(person => person.id !== id)))
+        .then(response => {
+          setPersons(persons.filter(person => person.id !== id))
+          setErrorMessage(`Deleted ${name}`)
+            setErrorState(true)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
     }
   }
 
   return (
     <div>
+      <Notification message={errorMessage} error={errorState} />
       <h2>Phonebook</h2>
       <Filter value={searchInput} onChange={handleSearchChange} />
         
