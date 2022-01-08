@@ -85,6 +85,11 @@ const App = () => {
               setErrorMessage(null)
             }, 5000)
           })
+          .catch(error => {
+            setErrorMessage(`${newName} was already removed from the server`)
+            setErrorState(true)
+            setPersons(persons.filter(person => person.id !== id))
+          })
       }
       return
     }
@@ -123,7 +128,7 @@ const App = () => {
         .then(response => {
           setPersons(persons.filter(person => person.id !== id))
           setErrorMessage(`Deleted ${name}`)
-            setErrorState(true)
+          setErrorState(false)
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
