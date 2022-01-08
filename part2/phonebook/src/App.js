@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import personsService from './services/persons'
 
-const Person = ({person}) => {
+const Person = ({person, deleteHandler}) => {
   return (
-    <p>{person.name} {person.number}</p>
+    <p>{person.name} {person.number} <button onClick={deleteHandler}>Delete</button></p>
   )
 }
 
-const Persons = ({persons, search}) => {
+const Persons = ({persons, search, deleteHandler}) => {
   const personsToShow = search ? persons.filter(value => value.name.toLowerCase().indexOf(search.toLowerCase()) !== -1) : persons
   
   return (
-    personsToShow.map(person => <Person person={person} key={person.name} />)
+    personsToShow.map(person => <Person person={person} key={person.id} deleteHandler={() => deleteHandler(person.id)} />)
   )
 }
 
@@ -81,6 +81,15 @@ const App = () => {
     setSearchInput(event.target.value)
   }
 
+  const deletePerson = (id) => {
+    const name = persons.filter(person => person.id === id)[0].name
+    if(window.confirm(`Delete ${name}?`)) {
+      personsService
+        .deletePerson(id)
+        .then(response => setPersons(persons.filter(person => person.id !== id)))
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -90,7 +99,7 @@ const App = () => {
       <PersonForm submitHandler={addPerson} newName={newName} newPhone={newPhone} handleNameChange={handleNameChange} handlePhoneChange={handlePhoneChange} />
       
       <h2>Numbers</h2>
-      <Persons persons={persons} search={searchInput} />
+      <Persons persons={persons} search={searchInput} deleteHandler={deletePerson} />
     </div>
   )
 }
