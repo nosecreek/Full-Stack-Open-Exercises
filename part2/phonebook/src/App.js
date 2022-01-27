@@ -86,9 +86,12 @@ const App = () => {
             }, 5000)
           })
           .catch(error => {
-            setErrorMessage(`${newName} was already removed from the server`)
+            setErrorMessage(error.response.data.error)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
             setErrorState(true)
-            setPersons(persons.filter(person => person.id !== id))
+            //setPersons(persons.filter(person => person.id !== id))
           })
       }
       return
@@ -102,6 +105,12 @@ const App = () => {
         setErrorState(false)
         setNewName('')
         setNewPhone('')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+      .catch(error => {
+        setErrorMessage(error.response.data.error)
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
