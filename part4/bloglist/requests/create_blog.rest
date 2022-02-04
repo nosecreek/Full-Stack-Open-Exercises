@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+
+{
+    "title": "Hacker News",
+    "author": "YCombinator",
+    "url": "https://news.ycombinator.com/",
+    "likes": 12
+}
