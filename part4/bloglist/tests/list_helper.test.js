@@ -94,3 +94,23 @@ describe('favorite blog', () => {
     expect(listHelper.favoriteBlog(bigList)).toEqual(bigList[2])
   })
 })
+
+describe('most blogs', () => {
+  test('empty list', () => {
+    expect(listHelper.mostBlogs(emptyList)).toEqual({})
+  })
+  
+  test('one blog', () => {
+    expect(listHelper.mostBlogs(listWithOneBlog)).toEqual({
+      author: "Edsger W. Dijkstra",
+      blogs: 1
+    })
+  })
+  
+  test('many blogs', () => {
+    expect(listHelper.mostBlogs(bigList)).toEqual({
+      author: "Robert C. Martin",
+      blogs: 3
+    })
+  })
+})
