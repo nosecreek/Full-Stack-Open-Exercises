@@ -16,7 +16,7 @@ const initialBlogs = [
   },
   {
     _id: "5a422aa71b54a676234d17f8",
-    title: "Go To Statement Considered Harmful",
+    title: "Go To Statement Considered Unharmful",
     author: "Edsger W. Dijkstra",
     url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
     likes: 5,
@@ -77,12 +77,34 @@ describe('get blogs from /api/blogs', () => {
     const response = await api.get('/api/blogs')
     expect(response.body).toHaveLength(initialBlogs.length)
   })
+
+  test('unique identifier is named id', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body[0].id).toBeDefined()
+  })
 })
 
-test('unique identifier is name id', async () => {
-  const response = await api.get('/api/blogs')
-  console.log(response.body[0])
-  expect(response.body[0].id).toBeDefined()
+
+describe('POST to create a new blog', () => {
+  const newBlog = {
+    title: 'Go To Statement Considered Harmfulish',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+    likes: 5
+  }
+  
+  test('total number of blogs increases by one', async () => {
+    await api.post('/api/blogs').send(newBlog)
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
+  })
+
+  test('title matches what was posted', async () => {
+    await api.post('/api/blogs').send(newBlog)
+    const response = await api.get('/api/blogs')
+    const titles = response.body.map(r => r.title)
+    expect(titles).toContain(newBlog.title)
+  })
 })
 
 afterAll(() => {

@@ -4,12 +4,14 @@
   "description": "Blog List Exercise",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose",
-    "dev": "nodemon index.js"
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js"
   },
   "author": "Dustin Lammiman",
   "license": "ISC",
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "jest": "^27.4.7",
     "nodemon": "^2.0.15",
     "supertest": "^6.2.2"
