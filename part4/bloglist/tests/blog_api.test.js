@@ -92,6 +92,13 @@ describe('POST to create a new blog', () => {
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
     likes: 5
   }
+
+  const newBlogNoLikes = {
+    title: 'Go To Statement Considered Harmfulish',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+    _id: "5a422bc61b54a676754d17fc",
+  }
   
   test('total number of blogs increases by one', async () => {
     await api.post('/api/blogs').send(newBlog)
@@ -104,6 +111,13 @@ describe('POST to create a new blog', () => {
     const response = await api.get('/api/blogs')
     const titles = response.body.map(r => r.title)
     expect(titles).toContain(newBlog.title)
+  })
+
+  test('if likes is empty default to 0', async () => {
+    await api.post('/api/blogs').send(newBlogNoLikes)
+    //const response = await api.get('/api/blogs')
+    const newPost = await Blog.findById(newBlogNoLikes._id)
+    expect(newPost.toJSON().likes).toEqual(0)
   })
 })
 
