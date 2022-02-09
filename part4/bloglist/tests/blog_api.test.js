@@ -79,6 +79,12 @@ describe('get blogs from /api/blogs', () => {
   })
 })
 
+test('unique identifier is name id', async () => {
+  const response = await api.get('/api/blogs')
+  console.log(response.body[0])
+  expect(response.body[0].id).toBeDefined()
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
