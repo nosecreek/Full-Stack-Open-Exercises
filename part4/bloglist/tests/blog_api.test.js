@@ -97,7 +97,21 @@ describe('POST to create a new blog', () => {
     title: 'Go To Statement Considered Harmfulish',
     author: 'Edsger W. Dijkstra',
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+    _id: "5a422bc61b54a676754d17fc"
+  }
+
+  const newBlogNoTitle = {
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
     _id: "5a422bc61b54a676754d17fc",
+    likes: 5
+  }
+
+  const newBlogNoURL = {
+    title: 'Go To Statement Considered Harmfulish',
+    author: 'Edsger W. Dijkstra',
+    _id: "5a422bc61b54a676754d17fc",
+    likes: 5
   }
   
   test('total number of blogs increases by one', async () => {
@@ -118,6 +132,16 @@ describe('POST to create a new blog', () => {
     //const response = await api.get('/api/blogs')
     const newPost = await Blog.findById(newBlogNoLikes._id)
     expect(newPost.toJSON().likes).toEqual(0)
+  })
+
+  test('if title is empty, return 400', async () => {
+    await api.post('/api/blogs').send(newBlogNoTitle)
+      .expect(400)
+  })
+
+  test('if url is empty, return 400', async () => {
+    await api.post('/api/blogs').send(newBlogNoURL)
+      .expect(400)
   })
 })
 
