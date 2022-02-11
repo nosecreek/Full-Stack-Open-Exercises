@@ -145,6 +145,22 @@ describe('POST to create a new blog', () => {
   })
 })
 
+describe('delete a blog', () => {
+  test('a valid blog is deleted', async () => {
+    await api
+      .delete('/api/blogs/5a422b891b54a676234d17fa')  
+      .expect(204)
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(initialBlogs.length - 1)
+  })
+
+  test('an invalid blog returns an error', async () => {
+    await api
+      .delete('/api/blogs/5a432b891b54a676234d17fa')  
+      .expect(204)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
