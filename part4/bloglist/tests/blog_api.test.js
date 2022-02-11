@@ -84,6 +84,21 @@ describe('get blogs from /api/blogs', () => {
   })
 })
 
+describe('get an individual blog by id', () => {
+  test('note is returned', async () => {
+    await api
+      .get(`/api/blogs/${initialBlogs[0]._id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('error for an invalid blog', async () => {
+    await api
+      .get(`/api/blogs/25`)
+      .expect(400)
+  })
+})
+
 
 describe('POST to create a new blog', () => {
   const newBlog = {
@@ -156,8 +171,36 @@ describe('delete a blog', () => {
 
   test('an invalid blog returns an error', async () => {
     await api
-      .delete('/api/blogs/5a432b891b54a676234d17fa')  
-      .expect(204)
+      .delete('/api/blogs/5a432b8951b54a676234d17fa')  
+      .expect(400)
+  })
+})
+
+describe('update a blog using a put request', () => {
+  const updatedBlog = {
+    _id: "5a422b891b54a676234d17fa",
+    title: "First class tests",
+    author: "Robert B. Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+    likes: 11,
+    __v: 0
+  }
+  
+  test('a valid blog is updated', async () => {
+    await api
+      .put(`/api/blogs/${updatedBlog._id}`)
+      .send(updatedBlog)  
+      .expect(200)
+    const response = await api.get(`/api/blogs/${updatedBlog._id}`)
+    expect(response.body.likes).toEqual(updatedBlog.likes)
+    expect(response.body.author).toEqual(updatedBlog.author)
+  })
+
+  test('an invalid blog returns an error', async () => {
+    await api
+      .put('/api/blogs/5a432b8491b54a676234d17fa')  
+      .send(updatedBlog)  
+      .expect(400)
   })
 })
 
