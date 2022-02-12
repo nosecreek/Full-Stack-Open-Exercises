@@ -26,7 +26,6 @@ const favoriteBlog = (blogs) => {
 
 const mostBlogs = (blogs) => {
   const reducer = (most, current) => {
-    console.log("comparing", most[1], current[1])
     if(most[1] < current[1]) {
       return current
     } else {
@@ -39,6 +38,29 @@ const mostBlogs = (blogs) => {
   return { author: author[0], blogs: author[1] }
 }
 
+const mostLikes = (blogs) => {
+  const reducer = (total, current) => {
+    return total + current.likes
+  }
+
+  const compare = (favorite, current) => {
+    if(favorite.likes < current.likes) {
+      return current
+    } else {
+      return favorite
+    }
+  }
+
+  if(blogs.length === 0) { return {} }
+
+  const authors = _(blogs).groupBy(x => x.author)
+    .map((val, key) => ({author: key, likes: _(val).reduce(reducer,0)}))
+    .value()
+  
+  const author = _(authors).reduce(compare)
+  return author
+}
+
 module.exports = {
-  dummy, totalLikes, favoriteBlog, mostBlogs
+  dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes
 }
