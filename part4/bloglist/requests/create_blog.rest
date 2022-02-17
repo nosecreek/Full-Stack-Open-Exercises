@@ -5,6 +5,5 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJpb
 {
     "title": "Hacker News",
     "author": "YCombinator",
-    "url": "https://news.ycombinator.com/",
-    "likes": 12
+    "url": "https://news.ycombinator.com/"
 }

@@ -6,7 +6,7 @@ const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 
-const userToken = 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJpbGwiLCJpZCI6IjYyMGM0YTcyNWM1NzIzOGJlZTRkOTFhOCIsImlhdCI6MTY0NTA2NDYxMX0.zhDh5gIekfxOYei3BNbV9TLGmKLGv0YSP9P-Z0AMlJQ'
+const userToken = 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWQiOiI2MjBjNDZkMGUxZDk2OTQxNjQzZjg1ODAiLCJpYXQiOjE2NDUwNzQ1ODN9.8hbHvyngX13cFkpgQmYwcgu32uEBi_cq2hkgXEAqIoA'
 const initialBlogs = [
   {
     _id: "5a422a851b54a676234d17f7",
@@ -37,7 +37,7 @@ const initialBlogs = [
     title: "First class tests",
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-    user: '620c4a725c57238bee4d91a8',
+    user: '620c46d0e1d96941643f8580',
     likes: 10,
     __v: 0
   },
@@ -133,33 +133,38 @@ describe('POST to create a new blog', () => {
   }
   
   test('total number of blogs increases by one', async () => {
-    await api.post('/api/blogs').send(newBlog)
+    await api.post('/api/blogs').send(newBlog).set({ Authorization: userToken }) 
     const response = await api.get('/api/blogs')
     expect(response.body).toHaveLength(initialBlogs.length + 1)
   })
 
   test('title matches what was posted', async () => {
-    await api.post('/api/blogs').send(newBlog)
+    await api.post('/api/blogs').send(newBlog).set({ Authorization: userToken }) 
     const response = await api.get('/api/blogs')
     const titles = response.body.map(r => r.title)
     expect(titles).toContain(newBlog.title)
   })
 
   test('if likes is empty default to 0', async () => {
-    await api.post('/api/blogs').send(newBlogNoLikes)
+    await api.post('/api/blogs').send(newBlogNoLikes).set({ Authorization: userToken }) 
     //const response = await api.get('/api/blogs')
     const newPost = await Blog.findById(newBlogNoLikes._id)
     expect(newPost.toJSON().likes).toEqual(0)
   })
 
   test('if title is empty, return 400', async () => {
-    await api.post('/api/blogs').send(newBlogNoTitle)
+    await api.post('/api/blogs').send(newBlogNoTitle).set({ Authorization: userToken }) 
       .expect(400)
   })
 
   test('if url is empty, return 400', async () => {
-    await api.post('/api/blogs').send(newBlogNoURL)
+    await api.post('/api/blogs').send(newBlogNoURL).set({ Authorization: userToken }) 
       .expect(400)
+  })
+
+  test('if unauthorized, return 401', async () => {
+    await api.post('/api/blogs').send(newBlog) 
+      .expect(401)
   })
 })
 

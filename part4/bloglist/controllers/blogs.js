@@ -20,7 +20,7 @@ blogsRouter.get('/:id', async (request, response) => {
 })
   
 blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
-
+  
   const body = request.body
   const user = await User.findById(request.user)
 
@@ -29,7 +29,8 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
     author: body.author,
     url: body.url,
     likes: body.likes,
-    user: user._id
+    user: user._id,
+    _id: body._id
   })
   const result = await blog.save()
   user.blogs = user.blogs.concat(result._id)
