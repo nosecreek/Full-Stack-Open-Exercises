@@ -5,6 +5,8 @@ const app = require('../app')
 
 const api = supertest(app)
 const Blog = require('../models/blog')
+
+const userToken = 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJpbGwiLCJpZCI6IjYyMGM0YTcyNWM1NzIzOGJlZTRkOTFhOCIsImlhdCI6MTY0NTA2NDYxMX0.zhDh5gIekfxOYei3BNbV9TLGmKLGv0YSP9P-Z0AMlJQ'
 const initialBlogs = [
   {
     _id: "5a422a851b54a676234d17f7",
@@ -35,6 +37,7 @@ const initialBlogs = [
     title: "First class tests",
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+    user: '620c4a725c57238bee4d91a8',
     likes: 10,
     __v: 0
   },
@@ -163,7 +166,8 @@ describe('POST to create a new blog', () => {
 describe('delete a blog', () => {
   test('a valid blog is deleted', async () => {
     await api
-      .delete('/api/blogs/5a422b891b54a676234d17fa')  
+      .delete('/api/blogs/5a422b891b54a676234d17fa')
+      .set({ Authorization: userToken})
       .expect(204)
     const response = await api.get('/api/blogs')
     expect(response.body).toHaveLength(initialBlogs.length - 1)
@@ -171,7 +175,8 @@ describe('delete a blog', () => {
 
   test('an invalid blog returns an error', async () => {
     await api
-      .delete('/api/blogs/5a432b8951b54a676234d17fa')  
+      .delete('/api/blogs/5a432b8951b54a676234d17fa') 
+      .set({ Authorization: userToken}) 
       .expect(400)
   })
 })
