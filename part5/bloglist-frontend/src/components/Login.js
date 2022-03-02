@@ -1,5 +1,6 @@
 import React from 'react'
 import loginService from '../services/login'
+import blogService from '../services/blogs'
 
 const LoginForm = ({username, setUsername, password, setPassword, setUser}) => {
   const handleLogin = async (event) => {
@@ -12,6 +13,7 @@ const LoginForm = ({username, setUsername, password, setPassword, setUser}) => {
       setUsername('')
       setPassword('')
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
+      blogService.setToken(user.token)
       console.log(user)
     } catch (exception) {
       console.log('Wrong username or password')
