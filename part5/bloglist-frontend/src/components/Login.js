@@ -11,6 +11,7 @@ const LoginForm = ({username, setUsername, password, setPassword, setUser}) => {
       setUser(user)
       setUsername('')
       setPassword('')
+      window.localStorage.setItem('loggedInUser', JSON.stringify(user))
       console.log(user)
     } catch (exception) {
       console.log('Wrong username or password')
