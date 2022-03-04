@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import blogService from '../services/blogs'
 
-const NewBlog = ({blogs, setBlogs}) => {
+const NewBlog = ({blogs, setBlogs, setMessage}) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -10,6 +10,7 @@ const NewBlog = ({blogs, setBlogs}) => {
     event.preventDefault()
     const newBlog = await blogService.create({"title": title, "author": author, "url": url})
     setBlogs(blogs.concat(newBlog))
+    setMessage(`New Blog: ${title} by ${author}`)
     setTitle('')
     setAuthor('')
     setUrl('')
