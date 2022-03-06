@@ -1,13 +1,13 @@
-import { useState } from "react"
+import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({blog, user, setMessage, blogs, setBlogs}) => {
+const Blog = ({ blog, user, setMessage, blogs, setBlogs }) => {
   const [visible, setVisible] = useState(false)
-  
+
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
   const isOwned = (blog.user ? blog.user.username : '') === user.username
-    
+
   const toggleVisibility = () => {
     setVisible(!visible)
   }
@@ -26,7 +26,7 @@ const Blog = ({blog, user, setMessage, blogs, setBlogs}) => {
     }
   }
 
-  const deleteButton = isOwned ? <><br /><button onClick={()=>handleDelete(blog)}>delete</button></> : ''
+  const deleteButton = isOwned ? <><br /><button onClick={() => handleDelete(blog)}>delete</button></> : ''
 
   const blogStyle = {
     paddingTop: 10,
@@ -35,7 +35,7 @@ const Blog = ({blog, user, setMessage, blogs, setBlogs}) => {
     borderWidth: 1,
     marginBottom: 5
   }
-  
+
   return (
     <div style={blogStyle}>
       <div style={hideWhenVisible}>
@@ -44,11 +44,11 @@ const Blog = ({blog, user, setMessage, blogs, setBlogs}) => {
       <div style={showWhenVisible}>
         {blog.title} <button onClick={toggleVisibility}>hide</button><br />
         {blog.url}<br />
-        {blog.likes} <button onClick={()=>handleLike(blog)}>like</button><br />
+        {blog.likes} <button onClick={() => handleLike(blog)}>like</button><br />
         {blog.author}
         {deleteButton}
       </div>
-    </div>  
+    </div>
   )
 }
 

@@ -1,4 +1,4 @@
-const Message = ({message, errorState}) => {
+const Message = ({ message, errorState }) => {
   let styles = {
     borderWidth: 2,
     borderColor: 'black',
@@ -6,13 +6,13 @@ const Message = ({message, errorState}) => {
     borderStyle: 'solid',
     color: 'green'
   }
-  
+
   if(errorState) { styles.color = 'red' }
 
   if(message) {
     return (
       <div style={styles}>{message}</div>
-    )  
+    )
   }
   return (<div></div>)
 }

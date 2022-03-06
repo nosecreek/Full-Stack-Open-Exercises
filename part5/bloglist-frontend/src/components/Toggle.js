@@ -27,4 +27,6 @@ const Toggle = forwardRef((props, ref) => {
   )
 })
 
+Toggle.displayName = 'Toggle'
+
 export default Toggle

@@ -12,7 +12,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [message, setTheMessage] = useState('')
   const [errorState, setErrorState] = useState(false)
-  
+
   const newBlogRef = useRef()
 
   const setMessage = (message) => {
@@ -22,7 +22,7 @@ const App = () => {
       setTheMessage(null)
     }, 5000)
   }
-  
+
   const setError = (message) => {
     setTheMessage(message)
     setErrorState(true)
@@ -34,7 +34,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs.sort((a,b) => b.likes - a.likes ) )
-    )  
+    )
   }, [])
 
   useEffect(() => {
