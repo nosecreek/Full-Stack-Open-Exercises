@@ -9,8 +9,6 @@ import blogService from './services/blogs'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [message, setTheMessage] = useState('')
   const [errorState, setErrorState] = useState(false)
@@ -52,7 +50,7 @@ const App = () => {
     return (
       <div>
         <Message message={message} errorState={errorState} />
-        <LoginForm username={username} setUsername={setUsername} password={password} setPassword={setPassword} setUser={setUser} setError={setError} setMessage={setMessage} />
+        <LoginForm setUser={setUser} setError={setError} setMessage={setMessage} />
       </div>
     )
   }

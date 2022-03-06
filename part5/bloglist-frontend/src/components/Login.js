@@ -1,20 +1,22 @@
-import React from 'react'
+import {useState} from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 
-const LoginForm = ({username, setUsername, password, setPassword, setUser, setError, setMessage}) => {
+const LoginForm = ({setUser, setError, setMessage}) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const handleLogin = async (event) => {
     event.preventDefault()
     console.log('logging in with', username, password)
 
     try {
       const user = await loginService.login({username, password})
-      setUser(user)
       setUsername('')
       setPassword('')
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setMessage(`Welcome ${user.name}`)
+      setUser(user)
     } catch (exception) {
       setError("Wrong username or password")
     }

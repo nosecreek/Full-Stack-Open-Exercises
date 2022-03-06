@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
 import blogService from '../services/blogs'
 
 const NewBlog = ({blogs, setBlogs, setMessage, newBlogRef}) => {

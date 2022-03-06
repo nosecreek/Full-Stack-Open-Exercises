@@ -1,4 +1,3 @@
-import React from 'react'
 const Logout = ({setUser, setMessage}) => {
   const handleLogout = (event) => {
     window.localStorage.removeItem('loggedInUser')

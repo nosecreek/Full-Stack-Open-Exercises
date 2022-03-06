@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Message = ({message, errorState}) => {
   let styles = {
     borderWidth: 2,
