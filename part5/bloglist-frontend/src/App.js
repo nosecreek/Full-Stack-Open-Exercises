@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/Login'
 import NewBlog from './components/NewBlog'
 import Logout from './components/Logout'
 import Message from './components/Message'
+import Toggle from './components/Toggle'
 import blogService from './services/blogs'
 
 const App = () => {
@@ -14,6 +15,8 @@ const App = () => {
   const [message, setTheMessage] = useState('')
   const [errorState, setErrorState] = useState(false)
   
+  const newBlogRef = useRef()
+
   const setMessage = (message) => {
     setTheMessage(message)
     setErrorState(false)
@@ -56,7 +59,9 @@ const App = () => {
   return (
     <div>
       <Message message={message} errorState={errorState} />
-      <NewBlog blogs={blogs} setBlogs={setBlogs} setMessage={setMessage} />
+      <Toggle label='New Blog' ref={newBlogRef}>
+        <NewBlog blogs={blogs} setBlogs={setBlogs} setMessage={setMessage} newBlogRef={newBlogRef} />
+      </Toggle>
       <br /><br />
       <div>
         <h2>blogs</h2>

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import blogService from '../services/blogs'
 
-const NewBlog = ({blogs, setBlogs, setMessage}) => {
+const NewBlog = ({blogs, setBlogs, setMessage, newBlogRef}) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -14,6 +14,7 @@ const NewBlog = ({blogs, setBlogs, setMessage}) => {
     setTitle('')
     setAuthor('')
     setUrl('')
+    newBlogRef.current.toggleVisibility()
   }
   return (
     <div>
