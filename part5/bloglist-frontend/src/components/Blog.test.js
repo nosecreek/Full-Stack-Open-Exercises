@@ -6,6 +6,7 @@ import Blog from './Blog'
 
 describe('Test that blogs display the correct elements' , () => {
   let container
+  const handleLike = jest.fn()
 
   beforeEach(() => {
     const blog = {
@@ -15,7 +16,7 @@ describe('Test that blogs display the correct elements' , () => {
       likes: 5
     }
 
-    container = render(<Blog blog={blog} />).container
+    container = render(<Blog blog={blog} handleLike={handleLike} />).container
   })
 
   test('renders author and title', () => {
@@ -38,5 +39,16 @@ describe('Test that blogs display the correct elements' , () => {
     const element = container.querySelector('.blog')
     expect(element).toHaveTextContent('Test Blog 1')
     expect(element).toHaveTextContent('Dustin')
+  })
+
+  test('clicking like calls the event handler', async () => {
+    const button = screen.getByText('view')
+    userEvent.click(button)
+
+    const likeButton = screen.getByText('like')
+    userEvent.click(likeButton)
+    userEvent.click(likeButton)
+
+    expect(handleLike.mock.calls).toHaveLength(2)
   })
 })
