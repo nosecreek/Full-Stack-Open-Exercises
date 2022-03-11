@@ -69,7 +69,7 @@ const App = () => {
     <div>
       <Message message={message} errorState={errorState} />
       <Toggle label='New Blog' ref={newBlogRef}>
-        <NewBlog blogs={blogs} setBlogs={setBlogs} setMessage={setMessage} newBlogRef={newBlogRef} />
+        <NewBlog blogs={blogs} setBlogs={setBlogs} setMessage={setMessage} newBlogRef={newBlogRef} createBlog={blogService.create} />
       </Toggle>
       <br /><br />
       <div>
