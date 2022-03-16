@@ -11,7 +11,7 @@ const Message = ({ message, errorState }) => {
 
   if(message) {
     return (
-      <div style={styles}>{message}</div>
+      <div style={styles} className='message'>{message}</div>
     )
   }
   return (<div></div>)
