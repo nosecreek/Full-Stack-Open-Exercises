@@ -54,21 +54,25 @@ describe('Blog app', function() {
       cy.contains('A Unique Test Blog - Bill Clinton').contains('view')
     })
 
+    it('Blogs are sorted correctly', function() {
+      cy.createBlog({ title: 'A Unique Test Blog 1', author: 'Bill Clinton', url: 'https://auniquetestblog.test', likes: 1 })
+      cy.createBlog({ title: 'A Unique Test Blog 2', author: 'Bill Joel', url: 'https://google.test' })
+      cy.createBlog({ title: 'A Unique Test Blog 3', author: 'Bill Smith', url: 'https://myblog.test', likes: 5 })
+      cy.createBlog({ title: 'A Unique Test Blog 4', author: 'Bill Joe', url: 'https://yourblog.test', likes: 3 })
+      cy.createBlog({ title: 'A Unique Test Blog 5', author: 'Bill Bill', url: 'https://billsblog.test', likes: 2 })
+
+      let lastspan = 100
+      cy.get('.view').click({ multiple: true })
+      cy.get('.likes').each(function($span) {
+        const thisspan = parseInt($span.text())
+        expect(thisspan).to.be.lessThan(lastspan)
+        lastspan = thisspan
+      })
+    })
+
     describe('Once a blog is created', function() {
       beforeEach(function() {
-        cy.request({
-          method: 'POST',
-          url: 'http://localhost:3003/api/blogs',
-          body: {
-            title: 'A Unique Test Blog',
-            author: 'Bill Clinton',
-            url: 'https://auniquetestblog.test'
-          },
-          headers: {
-            'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedInUser')).token}`
-          }
-        })
-        cy.visit('http://localhost:3000')
+        cy.createBlog({ title: 'A Unique Test Blog', author: 'Bill Clinton', url: 'https://auniquetestblog.test' })
       })
 
       it('The like button works', function() {
