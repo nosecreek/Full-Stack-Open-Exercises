@@ -49,9 +49,34 @@ describe('Blog app', function() {
       cy.get('#title').type('A Unique Test Blog')
       cy.get('#author').type('Bill Clinton')
       cy.get('#url').type('https://auniquetestblog.test')
-      cy.get("#createButton").click()
+      cy.get('#createButton').click()
 
       cy.contains('A Unique Test Blog - Bill Clinton').contains('view')
+    })
+
+    describe('Once a blog is created', function() {
+      beforeEach(function() {
+        cy.request({
+          method: 'POST',
+          url: 'http://localhost:3003/api/blogs',
+          body: {
+            title: 'A Unique Test Blog',
+            author: 'Bill Clinton',
+            url: 'https://auniquetestblog.test'
+          },
+          headers: {
+            'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedInUser')).token}`
+          }
+        })
+        cy.visit('http://localhost:3000')
+      })
+
+      it('The like button works', function() {
+        cy.contains('A Unique Test Blog - Bill Clinton').contains('view').click()
+        cy.contains('like').click()
+        cy.contains('like').click()
+        cy.contains('2')
+      })
     })
   })
 })
