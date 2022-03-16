@@ -77,6 +77,12 @@ describe('Blog app', function() {
         cy.contains('like').click()
         cy.contains('2')
       })
+
+      it('The blog can be deleted', function() {
+        cy.contains('A Unique Test Blog - Bill Clinton').contains('view').click()
+        cy.contains('delete').click()
+        cy.get('html').should('not.contain', 'Bill Clinton')
+      })
     })
   })
 })
