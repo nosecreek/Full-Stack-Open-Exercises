@@ -18,4 +18,6 @@ const update = async (id, newObject) => {
   return res.data
 }
 
-export default { getAll, createNew, update }
+const anecdoteService = { getAll, createNew, update }
+
+export default anecdoteService
