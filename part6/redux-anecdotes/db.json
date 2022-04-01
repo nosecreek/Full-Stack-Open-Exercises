@@ -37,7 +37,7 @@
     },
     {
       "content": "Test #2",
-      "votes": 14,
+      "votes": 15,
       "id": "guJkRF5"
     },
     {
@@ -49,6 +49,11 @@
       "content": "Last one before committing",
       "votes": 3,
       "id": "IEwv9j3"
+    },
+    {
+      "content": "Another test!!!",
+      "votes": 0,
+      "id": "MCli2aG"
     }
   ]
 }
