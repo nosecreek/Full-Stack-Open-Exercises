@@ -54,6 +54,11 @@
       "content": "Another test!!!",
       "votes": 0,
       "id": "MCli2aG"
+    },
+    {
+      "content": "Testing this with connect()",
+      "votes": 1,
+      "id": "uwB_MOW"
     }
   ]
 }
