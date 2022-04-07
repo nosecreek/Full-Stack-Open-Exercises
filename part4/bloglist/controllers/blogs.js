@@ -6,7 +6,11 @@ const User = require('../models/user')
 const middleware = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', {username: 1, name: 1, id: 1})
+  const blogs = await Blog.find({}).populate('user', {
+    username: 1,
+    name: 1,
+    id: 1
+  })
   response.json(blogs)
 })
 
@@ -18,9 +22,8 @@ blogsRouter.get('/:id', async (request, response) => {
     response.status(404).end()
   }
 })
-  
+
 blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
-  
   const body = request.body
   const user = await User.findById(request.user)
 
@@ -38,16 +41,22 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   response.status(201).json(result)
 })
 
-blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
-  const blog = await Blog.findById(request.params.id)
+blogsRouter.delete(
+  '/:id',
+  middleware.userExtractor,
+  async (request, response) => {
+    const blog = await Blog.findById(request.params.id)
 
-  if(blog.user.toString() === request.user.toString()) {
-    const result = await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).end()
-  } else {
-    return response.status(401).json({error: 'this user did not create this note'})
+    if (blog.user.toString() === request.user.toString()) {
+      const result = await Blog.findByIdAndRemove(request.params.id)
+      response.status(204).end()
+    } else {
+      return response
+        .status(401)
+        .json({ error: 'this user did not create this note' })
+    }
   }
-})
+)
 
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
@@ -59,7 +68,10 @@ blogsRouter.put('/:id', async (request, response) => {
     likes: body.likes
   }
 
-  result = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true, runValidators: true })
+  result = await Blog.findByIdAndUpdate(request.params.id, blog, {
+    new: true,
+    runValidators: true
+  })
   response.json(result)
 })
 

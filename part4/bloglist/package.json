@@ -13,8 +13,10 @@
   "license": "ISC",
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "eslint-config-prettier": "^8.5.0",
     "jest": "^27.4.7",
     "nodemon": "^2.0.15",
+    "prettier": "2.6.2",
     "supertest": "^6.2.2"
   },
   "dependencies": {

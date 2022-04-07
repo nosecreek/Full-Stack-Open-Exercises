@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
-describe('Test that blogs display the correct elements' , () => {
+describe('Test that blogs display the correct elements', () => {
   let container
   const handleLike = jest.fn()
 

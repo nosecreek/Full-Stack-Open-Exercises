@@ -6,21 +6,29 @@ const Blog = ({ blog, user, setMessage, blogs, setBlogs, handleLike }) => {
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
-  const isOwned = (blog.user ? blog.user.username : '') === (user ? user.username : null)
+  const isOwned =
+    (blog.user ? blog.user.username : '') === (user ? user.username : null)
 
   const toggleVisibility = () => {
     setVisible(!visible)
   }
 
   const handleDelete = async (blog) => {
-    if(window.confirm(`Delete ${blog.title} by ${blog.author}?`)) {
+    if (window.confirm(`Delete ${blog.title} by ${blog.author}?`)) {
       await blogService.deleteBlog(blog.id)
       setMessage('Blog Deleted')
-      setBlogs(blogs.filter(b => b.id !== blog.id))
+      setBlogs(blogs.filter((b) => b.id !== blog.id))
     }
   }
 
-  const deleteButton = isOwned ? <><br /><button onClick={() => handleDelete(blog)}>delete</button></> : ''
+  const deleteButton = isOwned ? (
+    <>
+      <br />
+      <button onClick={() => handleDelete(blog)}>delete</button>
+    </>
+  ) : (
+    ''
+  )
 
   const blogStyle = {
     paddingTop: 10,
@@ -31,14 +39,21 @@ const Blog = ({ blog, user, setMessage, blogs, setBlogs, handleLike }) => {
   }
 
   return (
-    <div className='blog' style={blogStyle}>
+    <div className="blog" style={blogStyle}>
       <div style={hideWhenVisible}>
-        {blog.title} - {blog.author} <button className='view' onClick={toggleVisibility}>view</button>
+        {blog.title} - {blog.author}{' '}
+        <button className="view" onClick={toggleVisibility}>
+          view
+        </button>
       </div>
       <div style={showWhenVisible}>
-        {blog.title} <button onClick={toggleVisibility}>hide</button><br />
-        {blog.url}<br />
-        <span className='likes'>{blog.likes}</span> <button onClick={() => handleLike(blog)}>like</button><br />
+        {blog.title} <button onClick={toggleVisibility}>hide</button>
+        <br />
+        {blog.url}
+        <br />
+        <span className="likes">{blog.likes}</span>{' '}
+        <button onClick={() => handleLike(blog)}>like</button>
+        <br />
         {blog.author}
         {deleteButton}
       </div>

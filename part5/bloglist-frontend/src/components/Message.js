@@ -7,14 +7,18 @@ const Message = ({ message, errorState }) => {
     color: 'green'
   }
 
-  if(errorState) { styles.color = 'red' }
+  if (errorState) {
+    styles.color = 'red'
+  }
 
-  if(message) {
+  if (message) {
     return (
-      <div style={styles} className='message'>{message}</div>
+      <div style={styles} className="message">
+        {message}
+      </div>
     )
   }
-  return (<div></div>)
+  return <div></div>
 }
 
 export default Message

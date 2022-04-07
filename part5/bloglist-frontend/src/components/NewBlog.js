@@ -8,7 +8,11 @@ const NewBlog = ({ blogs, setBlogs, setMessage, newBlogRef, createBlog }) => {
 
   const handleNewBlog = async (event) => {
     event.preventDefault()
-    const newBlog = await createBlog({ 'title': title, 'author': author, 'url': url })
+    const newBlog = await createBlog({
+      title: title,
+      author: author,
+      url: url
+    })
     setBlogs(blogs.concat(newBlog))
     setMessage(`New Blog: ${title} by ${author}`)
     setTitle('')
@@ -23,17 +27,40 @@ const NewBlog = ({ blogs, setBlogs, setMessage, newBlogRef, createBlog }) => {
       <form onSubmit={handleNewBlog}>
         <div>
           title
-          <input type="text" value={title} className="title" name="Title" id="title" onChange={({ target }) => setTitle(target.value)} />
+          <input
+            type="text"
+            value={title}
+            className="title"
+            name="Title"
+            id="title"
+            onChange={({ target }) => setTitle(target.value)}
+          />
         </div>
         <div>
           author
-          <input type="text" value={author} className="author" name="Author" id="author" onChange={({ target }) => setAuthor(target.value)} />
+          <input
+            type="text"
+            value={author}
+            className="author"
+            name="Author"
+            id="author"
+            onChange={({ target }) => setAuthor(target.value)}
+          />
         </div>
         <div>
           url
-          <input type="text" value={url} className="url" name="URL" id="url" onChange={({ target }) => setUrl(target.value)} />
+          <input
+            type="text"
+            value={url}
+            className="url"
+            name="URL"
+            id="url"
+            onChange={({ target }) => setUrl(target.value)}
+          />
         </div>
-        <button type="submit" id="createButton">Submit</button>
+        <button type="submit" id="createButton">
+          Submit
+        </button>
       </form>
     </div>
   )

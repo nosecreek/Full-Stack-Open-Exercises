@@ -1,5 +1,5 @@
-describe('Blog app', function() {
-  beforeEach(function() {
+describe('Blog app', function () {
+  beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/test/reset')
     cy.request('POST', 'http://localhost:3003/api/users/', {
       username: 'testuser1',
@@ -9,13 +9,13 @@ describe('Blog app', function() {
     cy.visit('http://localhost:3000')
   })
 
-  it('Login form is shown', function() {
+  it('Login form is shown', function () {
     cy.contains('username')
     cy.contains('password')
   })
 
-  describe('Login', function() {
-    it('succeeds with correct credentials', function() {
+  describe('Login', function () {
+    it('succeeds with correct credentials', function () {
       cy.get('#username').type('testuser1')
       cy.get('#password').type('password123')
       cy.get('#login-button').click()
@@ -23,7 +23,7 @@ describe('Blog app', function() {
       cy.contains('Welcome Test')
     })
 
-    it('fails with wrong credentials', function() {
+    it('fails with wrong credentials', function () {
       cy.get('#username').type('testuser1')
       cy.get('#password').type('password321')
       cy.get('#login-button').click()
@@ -33,18 +33,18 @@ describe('Blog app', function() {
     })
   })
 
-  describe('When logged in', function() {
-    beforeEach(function() {
+  describe('When logged in', function () {
+    beforeEach(function () {
       cy.request('POST', 'http://localhost:3003/api/login/', {
         username: 'testuser1',
         password: 'password123'
-      }).then(res => {
+      }).then((res) => {
         localStorage.setItem('loggedInUser', JSON.stringify(res.body))
         cy.visit('http://localhost:3000')
       })
     })
 
-    it('A blog can be created', function() {
+    it('A blog can be created', function () {
       cy.contains('New Blog').click()
       cy.get('#title').type('A Unique Test Blog')
       cy.get('#author').type('Bill Clinton')
@@ -54,36 +54,68 @@ describe('Blog app', function() {
       cy.contains('A Unique Test Blog - Bill Clinton').contains('view')
     })
 
-    it('Blogs are sorted correctly', function() {
-      cy.createBlog({ title: 'A Unique Test Blog 1', author: 'Bill Clinton', url: 'https://auniquetestblog.test', likes: 1 })
-      cy.createBlog({ title: 'A Unique Test Blog 2', author: 'Bill Joel', url: 'https://google.test' })
-      cy.createBlog({ title: 'A Unique Test Blog 3', author: 'Bill Smith', url: 'https://myblog.test', likes: 5 })
-      cy.createBlog({ title: 'A Unique Test Blog 4', author: 'Bill Joe', url: 'https://yourblog.test', likes: 3 })
-      cy.createBlog({ title: 'A Unique Test Blog 5', author: 'Bill Bill', url: 'https://billsblog.test', likes: 2 })
+    it('Blogs are sorted correctly', function () {
+      cy.createBlog({
+        title: 'A Unique Test Blog 1',
+        author: 'Bill Clinton',
+        url: 'https://auniquetestblog.test',
+        likes: 1
+      })
+      cy.createBlog({
+        title: 'A Unique Test Blog 2',
+        author: 'Bill Joel',
+        url: 'https://google.test'
+      })
+      cy.createBlog({
+        title: 'A Unique Test Blog 3',
+        author: 'Bill Smith',
+        url: 'https://myblog.test',
+        likes: 5
+      })
+      cy.createBlog({
+        title: 'A Unique Test Blog 4',
+        author: 'Bill Joe',
+        url: 'https://yourblog.test',
+        likes: 3
+      })
+      cy.createBlog({
+        title: 'A Unique Test Blog 5',
+        author: 'Bill Bill',
+        url: 'https://billsblog.test',
+        likes: 2
+      })
 
       let lastspan = 100
       cy.get('.view').click({ multiple: true })
-      cy.get('.likes').each(function($span) {
+      cy.get('.likes').each(function ($span) {
         const thisspan = parseInt($span.text())
         expect(thisspan).to.be.lessThan(lastspan)
         lastspan = thisspan
       })
     })
 
-    describe('Once a blog is created', function() {
-      beforeEach(function() {
-        cy.createBlog({ title: 'A Unique Test Blog', author: 'Bill Clinton', url: 'https://auniquetestblog.test' })
+    describe('Once a blog is created', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: 'A Unique Test Blog',
+          author: 'Bill Clinton',
+          url: 'https://auniquetestblog.test'
+        })
       })
 
-      it('The like button works', function() {
-        cy.contains('A Unique Test Blog - Bill Clinton').contains('view').click()
+      it('The like button works', function () {
+        cy.contains('A Unique Test Blog - Bill Clinton')
+          .contains('view')
+          .click()
         cy.contains('like').click()
         cy.contains('like').click()
         cy.contains('2')
       })
 
-      it('The blog can be deleted', function() {
-        cy.contains('A Unique Test Blog - Bill Clinton').contains('view').click()
+      it('The blog can be deleted', function () {
+        cy.contains('A Unique Test Blog - Bill Clinton')
+          .contains('view')
+          .click()
         cy.contains('delete').click()
         cy.get('html').should('not.contain', 'Bill Clinton')
       })

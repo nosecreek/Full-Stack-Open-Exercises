@@ -14,14 +14,15 @@ const mongoUrl = config.MONGODB_URI
 
 logger.info('connecting to', mongoUrl)
 
-mongoose.connect(mongoUrl)
+mongoose
+  .connect(mongoUrl)
   .then(() => {
     logger.info('connected to MongoDB')
   })
   .catch((error) => {
     logger.error('error connecting to MongoDB:', error.message)
   })
-  
+
 app.use(cors())
 app.use(express.json())
 app.use(middleware.tokenExtractor)

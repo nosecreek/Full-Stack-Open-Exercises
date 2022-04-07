@@ -4,15 +4,23 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import NewBlog from './NewBlog'
 
-describe('Creating a new blog' , () => {
+describe('Creating a new blog', () => {
   let container
   const createBlog = jest.fn()
   const setMessage = jest.fn()
   const setBlogs = jest.fn()
-  const newBlogRef = { 'current': { 'toggleVisibility': jest.fn() } }
+  const newBlogRef = { current: { toggleVisibility: jest.fn() } }
 
   beforeEach(() => {
-    container = render(<NewBlog blogs={[]} createBlog={createBlog} setMessage={setMessage} setBlogs={setBlogs} newBlogRef={newBlogRef} />).container
+    container = render(
+      <NewBlog
+        blogs={[]}
+        createBlog={createBlog}
+        setMessage={setMessage}
+        setBlogs={setBlogs}
+        newBlogRef={newBlogRef}
+      />
+    ).container
   })
 
   test('creating a new blog fires the correct event', async () => {
@@ -39,6 +47,5 @@ describe('Creating a new blog' , () => {
       expect(createBlog.mock.calls[0][0].author).toBe('Dustin')
       expect(createBlog.mock.calls[0][0].url).toBe('thissite.com')
     })
-
   })
 })

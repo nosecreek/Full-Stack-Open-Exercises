@@ -4,9 +4,7 @@ const Logout = ({ setUser, setMessage }) => {
     setUser(null)
     setMessage('user logged out')
   }
-  return (
-    <button onClick={handleLogout}>Logout</button>
-  )
+  return <button onClick={handleLogout}>Logout</button>
 }
 
 export default Logout
