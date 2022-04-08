@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
+import { setBlogs } from '../reducers/blogReducer'
 
-const Blog = ({ blog, user, blogs, setBlogs, handleLike }) => {
+const Blog = ({ blog, user, handleLike }) => {
   const dispatch = useDispatch()
+  const blogs = useSelector(({ blogs }) =>
+    [...blogs].sort((a, b) => b.likes - a.likes)
+  )
 
   const [visible, setVisible] = useState(false)
 
@@ -21,7 +25,7 @@ const Blog = ({ blog, user, blogs, setBlogs, handleLike }) => {
     if (window.confirm(`Delete ${blog.title} by ${blog.author}?`)) {
       await blogService.deleteBlog(blog.id)
       dispatch(setNotification('Blog Deleted'))
-      setBlogs(blogs.filter((b) => b.id !== blog.id))
+      dispatch(setBlogs(blogs.filter((b) => b.id !== blog.id)))
     }
   }
 

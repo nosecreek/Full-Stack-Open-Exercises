@@ -6,31 +6,38 @@ import Logout from './components/Logout'
 import Notification from './components/Notification'
 import Toggle from './components/Toggle'
 import blogService from './services/blogs'
+import { useSelector } from 'react-redux'
+import { setBlogs, initializeBlogs } from './reducers/blogReducer'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const dispatch = useDispatch()
+
   const [user, setUser] = useState(null)
 
   const newBlogRef = useRef()
+  const blogs = useSelector(({ blogs }) =>
+    [...blogs].sort((a, b) => b.likes - a.likes)
+  )
+
+  useEffect(() => {
+    dispatch(initializeBlogs(blogs))
+  }, [dispatch])
 
   const handleLike = async (blog) => {
     blog.likes++
     await blogService.update(blog.id, blog)
-    setBlogs(
-      blogs.map((b) => {
-        if (b.id === blog.id) {
-          b.likes = blog.likes
-        }
-        return b
-      })
+    dispatch(
+      setBlogs(
+        blogs.map((b) => {
+          if (b.id === blog.id) {
+            b.likes = blog.likes
+          }
+          return b
+        })
+      )
     )
   }
-
-  useEffect(() => {
-    blogService
-      .getAll()
-      .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
-  }, [])
 
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
@@ -53,26 +60,14 @@ const App = () => {
     <div>
       <Notification />
       <Toggle label="New Blog" ref={newBlogRef}>
-        <NewBlog
-          blogs={blogs}
-          setBlogs={setBlogs}
-          newBlogRef={newBlogRef}
-          createBlog={blogService.create}
-        />
+        <NewBlog newBlogRef={newBlogRef} />
       </Toggle>
       <br />
       <br />
       <div>
         <h2>blogs</h2>
         {blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            user={user}
-            blogs={blogs}
-            setBlogs={setBlogs}
-            handleLike={handleLike}
-          />
+          <Blog key={blog.id} blog={blog} user={user} handleLike={handleLike} />
         ))}
       </div>
       <br />

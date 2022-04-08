@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { setNotification } from '../reducers/notificationReducer'
-// import blogService from '../services/blogs'
+import { createBlog } from '../reducers/blogReducer'
 
-const NewBlog = ({ blogs, setBlogs, newBlogRef, createBlog }) => {
+const NewBlog = ({ newBlogRef }) => {
   const dispatch = useDispatch()
 
   const [title, setTitle] = useState('')
@@ -12,13 +11,13 @@ const NewBlog = ({ blogs, setBlogs, newBlogRef, createBlog }) => {
 
   const handleNewBlog = async (event) => {
     event.preventDefault()
-    const newBlog = await createBlog({
-      title: title,
-      author: author,
-      url: url
-    })
-    setBlogs(blogs.concat(newBlog))
-    dispatch(setNotification(`New Blog: ${title} by ${author}`))
+    dispatch(
+      createBlog({
+        title: title,
+        author: author,
+        url: url
+      })
+    )
     setTitle('')
     setAuthor('')
     setUrl('')
