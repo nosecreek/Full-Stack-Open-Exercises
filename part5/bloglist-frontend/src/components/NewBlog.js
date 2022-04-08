@@ -1,7 +1,11 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setNotification } from '../reducers/notificationReducer'
 // import blogService from '../services/blogs'
 
-const NewBlog = ({ blogs, setBlogs, setMessage, newBlogRef, createBlog }) => {
+const NewBlog = ({ blogs, setBlogs, newBlogRef, createBlog }) => {
+  const dispatch = useDispatch()
+
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -14,7 +18,7 @@ const NewBlog = ({ blogs, setBlogs, setMessage, newBlogRef, createBlog }) => {
       url: url
     })
     setBlogs(blogs.concat(newBlog))
-    setMessage(`New Blog: ${title} by ${author}`)
+    dispatch(setNotification(`New Blog: ${title} by ${author}`))
     setTitle('')
     setAuthor('')
     setUrl('')

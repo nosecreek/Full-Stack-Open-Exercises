@@ -1,7 +1,11 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
+import { useDispatch } from 'react-redux'
+import { setNotification } from '../reducers/notificationReducer'
 
-const Blog = ({ blog, user, setMessage, blogs, setBlogs, handleLike }) => {
+const Blog = ({ blog, user, blogs, setBlogs, handleLike }) => {
+  const dispatch = useDispatch()
+
   const [visible, setVisible] = useState(false)
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -16,7 +20,7 @@ const Blog = ({ blog, user, setMessage, blogs, setBlogs, handleLike }) => {
   const handleDelete = async (blog) => {
     if (window.confirm(`Delete ${blog.title} by ${blog.author}?`)) {
       await blogService.deleteBlog(blog.id)
-      setMessage('Blog Deleted')
+      dispatch(setNotification('Blog Deleted'))
       setBlogs(blogs.filter((b) => b.id !== blog.id))
     }
   }
