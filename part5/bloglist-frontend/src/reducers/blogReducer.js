@@ -37,4 +37,26 @@ export const createBlog = (content) => {
   }
 }
 
+export const likeBlog = (id) => {
+  return async (dispatch, getState) => {
+    let blogToChange = getState().blogs.find((b) => b.id === id)
+    const changedBlog = {
+      ...blogToChange,
+      likes: blogToChange.likes + 1
+    }
+    await blogService.update(id, changedBlog)
+    dispatch(updateBlog({ id, changedBlog }))
+  }
+}
+
+export const deleteBlog = (blog) => {
+  return async (dispatch, getState) => {
+    if (window.confirm(`Delete ${blog.title} by ${blog.author}?`)) {
+      await blogService.deleteBlog(blog.id)
+      dispatch(setNotification('Blog Deleted'))
+      dispatch(setBlogs(getState().blogs.filter((b) => b.id !== blog.id)))
+    }
+  }
+}
+
 export default blogSlice.reducer

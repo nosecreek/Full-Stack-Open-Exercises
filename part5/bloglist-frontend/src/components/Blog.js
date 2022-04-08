@@ -1,14 +1,9 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
-import { useDispatch, useSelector } from 'react-redux'
-import { setNotification } from '../reducers/notificationReducer'
-import { setBlogs } from '../reducers/blogReducer'
+import { useDispatch } from 'react-redux'
+import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, user, handleLike }) => {
+const Blog = ({ blog, user }) => {
   const dispatch = useDispatch()
-  const blogs = useSelector(({ blogs }) =>
-    [...blogs].sort((a, b) => b.likes - a.likes)
-  )
 
   const [visible, setVisible] = useState(false)
 
@@ -21,18 +16,10 @@ const Blog = ({ blog, user, handleLike }) => {
     setVisible(!visible)
   }
 
-  const handleDelete = async (blog) => {
-    if (window.confirm(`Delete ${blog.title} by ${blog.author}?`)) {
-      await blogService.deleteBlog(blog.id)
-      dispatch(setNotification('Blog Deleted'))
-      dispatch(setBlogs(blogs.filter((b) => b.id !== blog.id)))
-    }
-  }
-
   const deleteButton = isOwned ? (
     <>
       <br />
-      <button onClick={() => handleDelete(blog)}>delete</button>
+      <button onClick={() => dispatch(deleteBlog(blog))}>delete</button>
     </>
   ) : (
     ''
@@ -60,7 +47,7 @@ const Blog = ({ blog, user, handleLike }) => {
         {blog.url}
         <br />
         <span className="likes">{blog.likes}</span>{' '}
-        <button onClick={() => handleLike(blog)}>like</button>
+        <button onClick={() => dispatch(likeBlog(blog.id))}>like</button>
         <br />
         {blog.author}
         {deleteButton}

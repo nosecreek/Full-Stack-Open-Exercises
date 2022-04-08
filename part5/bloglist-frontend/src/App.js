@@ -7,7 +7,7 @@ import Notification from './components/Notification'
 import Toggle from './components/Toggle'
 import blogService from './services/blogs'
 import { useSelector } from 'react-redux'
-import { setBlogs, initializeBlogs } from './reducers/blogReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 
 const App = () => {
@@ -23,21 +23,6 @@ const App = () => {
   useEffect(() => {
     dispatch(initializeBlogs(blogs))
   }, [dispatch])
-
-  const handleLike = async (blog) => {
-    blog.likes++
-    await blogService.update(blog.id, blog)
-    dispatch(
-      setBlogs(
-        blogs.map((b) => {
-          if (b.id === blog.id) {
-            b.likes = blog.likes
-          }
-          return b
-        })
-      )
-    )
-  }
 
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
@@ -67,7 +52,7 @@ const App = () => {
       <div>
         <h2>blogs</h2>
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} user={user} handleLike={handleLike} />
+          <Blog key={blog.id} blog={blog} user={user} />
         ))}
       </div>
       <br />
