@@ -1,15 +1,9 @@
 import { useDispatch } from 'react-redux'
-import { setNotification } from '../reducers/notificationReducer'
+import { logoutUser } from '../reducers/userReducer'
 
-const Logout = ({ setUser }) => {
+const Logout = () => {
   const dispatch = useDispatch()
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedInUser')
-    setUser(null)
-    dispatch(setNotification('user logged out'))
-  }
-  return <button onClick={handleLogout}>Logout</button>
+  return <button onClick={() => dispatch(logoutUser())}>Logout</button>
 }
 
 export default Logout

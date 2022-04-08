@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/Login'
 import NewBlog from './components/NewBlog'
 import Logout from './components/Logout'
 import Notification from './components/Notification'
 import Toggle from './components/Toggle'
-import blogService from './services/blogs'
 import { useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch } from 'react-redux'
+import { initializeUser } from './reducers/userReducer'
 
 const App = () => {
   const dispatch = useDispatch()
 
-  const [user, setUser] = useState(null)
+  const user = useSelector(({ user }) => user)
 
   const newBlogRef = useRef()
   const blogs = useSelector(({ blogs }) =>
@@ -25,19 +25,14 @@ const App = () => {
   }, [dispatch])
 
   useEffect(() => {
-    const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
-    if (loggedInUserJSON) {
-      const loggedInUser = JSON.parse(loggedInUserJSON)
-      setUser(loggedInUser)
-      blogService.setToken(loggedInUser.token)
-    }
-  }, [])
+    dispatch(initializeUser())
+  }, [dispatch])
 
   if (user === null) {
     return (
       <div>
         <Notification />
-        <LoginForm setUser={setUser} />
+        <LoginForm />
       </div>
     )
   }
@@ -57,7 +52,7 @@ const App = () => {
       </div>
       <br />
       <br />
-      <Logout setUser={setUser} />
+      <Logout />
     </div>
   )
 }
