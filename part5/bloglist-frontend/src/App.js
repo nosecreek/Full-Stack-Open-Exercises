@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 import { initializeUser } from './reducers/userReducer'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Link } from 'react-router-dom'
 import { initializeUsers } from './reducers/usersReducer'
 
 const App = () => {
@@ -36,6 +36,14 @@ const App = () => {
     dispatch(initializeUsers())
   }, [dispatch])
 
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
+  }
+
   if (user === null) {
     return (
       <div>
@@ -58,13 +66,16 @@ const App = () => {
           element={
             <div>
               {blogs.map((blog) => (
-                <Blog key={blog.id} blog={blog} user={user} />
+                <div key={blog.id} style={blogStyle}>
+                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                </div>
               ))}
             </div>
           }
         />
         <Route path="/users" element={<Users />} />
         <Route path="/users/:id" element={<User />} />
+        <Route path="/blogs/:id" element={<Blog />} />
       </Routes>
     </div>
   )
