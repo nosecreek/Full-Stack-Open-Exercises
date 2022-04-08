@@ -6,6 +6,7 @@ import Logout from './components/Logout'
 import Notification from './components/Notification'
 import Toggle from './components/Toggle'
 import Users from './components/Users'
+import User from './components/User'
 import { useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch } from 'react-redux'
@@ -46,22 +47,24 @@ const App = () => {
   return (
     <div>
       <Notification />
+      <h2>blogs</h2>
       <Toggle label="New Blog" ref={newBlogRef}>
         <NewBlog newBlogRef={newBlogRef} />
       </Toggle>
-      <br />
-      <br />
-      <div>
-        <h2>blogs</h2>
-        {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} user={user} />
-        ))}
-      </div>
-      <br />
-      <br />
       <Logout />
       <Routes>
+        <Route
+          path="/"
+          element={
+            <div>
+              {blogs.map((blog) => (
+                <Blog key={blog.id} blog={blog} user={user} />
+              ))}
+            </div>
+          }
+        />
         <Route path="/users" element={<Users />} />
+        <Route path="/users/:id" element={<User />} />
       </Routes>
     </div>
   )
