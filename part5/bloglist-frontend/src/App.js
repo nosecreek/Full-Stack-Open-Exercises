@@ -5,10 +5,13 @@ import NewBlog from './components/NewBlog'
 import Logout from './components/Logout'
 import Notification from './components/Notification'
 import Toggle from './components/Toggle'
+import Users from './components/Users'
 import { useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 import { initializeUser } from './reducers/userReducer'
+import { Routes, Route } from 'react-router-dom'
+import { initializeUsers } from './reducers/usersReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -26,6 +29,10 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeUser())
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(initializeUsers())
   }, [dispatch])
 
   if (user === null) {
@@ -53,6 +60,9 @@ const App = () => {
       <br />
       <br />
       <Logout />
+      <Routes>
+        <Route path="/users" element={<Users />} />
+      </Routes>
     </div>
   )
 }
