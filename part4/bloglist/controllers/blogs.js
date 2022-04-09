@@ -76,7 +76,7 @@ blogsRouter.put('/:id', async (request, response) => {
 })
 
 blogsRouter.post('/:id/comments', async (request, response) => {
-  let result = await Blog.findById(request.body.id)
+  let result = await Blog.findById(request.params.id)
   if (!result) {
     response.status(404).end()
   }
@@ -85,7 +85,7 @@ blogsRouter.post('/:id/comments', async (request, response) => {
 
   result.comments = result.comments.concat(comment)
   console.log(result)
-  result = await Blog.findByIdAndUpdate(request.body.id, result, {
+  result = await Blog.findByIdAndUpdate(request.params.id, result, {
     new: true,
     runValidators: true
   })

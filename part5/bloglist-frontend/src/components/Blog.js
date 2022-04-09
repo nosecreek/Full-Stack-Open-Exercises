@@ -1,6 +1,32 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { likeBlog, deleteBlog } from '../reducers/blogReducer'
+import { useState } from 'react'
+import { likeBlog, deleteBlog, addComment } from '../reducers/blogReducer'
 import { useParams } from 'react-router-dom'
+
+const CommentForm = ({ id }) => {
+  const dispatch = useDispatch()
+  const [comment, setComment] = useState('')
+
+  const handleNewComment = (event) => {
+    event.preventDefault()
+    dispatch(addComment(id, comment))
+    console.log(comment)
+  }
+
+  return (
+    <form onSubmit={handleNewComment}>
+      <input
+        type="text"
+        value={comment}
+        className="title"
+        name="Title"
+        id="title"
+        onChange={({ target }) => setComment(target.value)}
+      />
+      <input type="submit" />
+    </form>
+  )
+}
 
 const Blog = () => {
   const dispatch = useDispatch()
@@ -33,6 +59,7 @@ const Blog = () => {
       <span>added by {blog.user ? blog.user.name : 'unknown'}</span>
       {deleteButton}
       <h3>Comments</h3>
+      <CommentForm id={blog.id} />
       <ul>
         {blog.comments.map((c, i) => (
           <li key={i}>{c}</li>
