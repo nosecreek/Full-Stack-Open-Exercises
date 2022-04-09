@@ -32,6 +32,12 @@ const Blog = () => {
       <br />
       <span>added by {blog.user ? blog.user.name : 'unknown'}</span>
       {deleteButton}
+      <h3>Comments</h3>
+      <ul>
+        {blog.comments.map((c, i) => (
+          <li key={i}>{c}</li>
+        ))}
+      </ul>
     </div>
   )
 }
