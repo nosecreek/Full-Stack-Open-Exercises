@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/Login'
 import NewBlog from './components/NewBlog'
-import Logout from './components/Logout'
+import Navigation from './components/Navigation'
 import Notification from './components/Notification'
 import Toggle from './components/Toggle'
 import Users from './components/Users'
@@ -54,12 +54,12 @@ const App = () => {
   }
   return (
     <div>
+      <Navigation />
       <Notification />
-      <h2>blogs</h2>
+      <h2>Blog App</h2>
       <Toggle label="New Blog" ref={newBlogRef}>
         <NewBlog newBlogRef={newBlogRef} />
       </Toggle>
-      <Logout />
       <Routes>
         <Route
           path="/"
