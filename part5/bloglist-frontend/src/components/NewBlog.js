@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
+import { Form, Button } from 'react-bootstrap'
 
 const NewBlog = ({ newBlogRef }) => {
   const dispatch = useDispatch()
@@ -27,10 +28,10 @@ const NewBlog = ({ newBlogRef }) => {
   return (
     <div>
       <h2>New Blog</h2>
-      <form onSubmit={handleNewBlog}>
+      <Form onSubmit={handleNewBlog}>
         <div>
-          title
-          <input
+          <Form.Label>Title</Form.Label>
+          <Form.Control
             type="text"
             value={title}
             className="title"
@@ -39,9 +40,10 @@ const NewBlog = ({ newBlogRef }) => {
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
+        <br />
         <div>
-          author
-          <input
+          <Form.Label>Author</Form.Label>
+          <Form.Control
             type="text"
             value={author}
             className="author"
@@ -50,9 +52,10 @@ const NewBlog = ({ newBlogRef }) => {
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
+        <br />
         <div>
-          url
-          <input
+          <Form.Label>URL</Form.Label>
+          <Form.Control
             type="text"
             value={url}
             className="url"
@@ -61,10 +64,11 @@ const NewBlog = ({ newBlogRef }) => {
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button type="submit" id="createButton">
+        <br />
+        <Button type="submit" id="createButton">
           Submit
-        </button>
-      </form>
+        </Button>
+      </Form>
     </div>
   )
 }

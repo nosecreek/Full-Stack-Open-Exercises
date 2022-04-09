@@ -44,12 +44,12 @@ export const loginUser = (username, password, setUsername, setPassword) => {
   return async (dispatch) => {
     try {
       const user = await loginService.login({ username, password })
+      setUsername('')
+      setPassword('')
       window.localStorage.setItem('loggedInUser', JSON.stringify(user))
       blogService.setToken(user.token)
       dispatch(setNotification(`Welcome ${user.name}`))
       dispatch(setUser(user))
-      setUsername('')
-      setPassword('')
     } catch (exception) {
       dispatch(setError('Wrong username or password'))
     }

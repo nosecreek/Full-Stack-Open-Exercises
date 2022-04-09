@@ -84,7 +84,6 @@ blogsRouter.post('/:id/comments', async (request, response) => {
   const comment = request.body.comment
 
   result.comments = result.comments.concat(comment)
-  console.log(result)
   result = await Blog.findByIdAndUpdate(request.params.id, result, {
     new: true,
     runValidators: true

@@ -11,12 +11,12 @@ import { useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 import { initializeUser } from './reducers/userReducer'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import { initializeUsers } from './reducers/usersReducer'
+import { Table } from 'react-bootstrap'
 
 const App = () => {
   const dispatch = useDispatch()
-
   const user = useSelector(({ user }) => user)
 
   const newBlogRef = useRef()
@@ -36,46 +36,46 @@ const App = () => {
     dispatch(initializeUsers())
   }, [dispatch])
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
-  if (user === null) {
-    return (
-      <div>
-        <Notification />
-        <LoginForm />
-      </div>
-    )
-  }
   return (
     <div>
       <Navigation />
       <Notification />
       <h2>Blog App</h2>
-      <Toggle label="New Blog" ref={newBlogRef}>
-        <NewBlog newBlogRef={newBlogRef} />
-      </Toggle>
+      <br />
       <Routes>
         <Route
           path="/"
           element={
-            <div>
-              {blogs.map((blog) => (
-                <div key={blog.id} style={blogStyle}>
-                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-                </div>
-              ))}
-            </div>
+            <>
+              {user ? (
+                <Toggle label="New Blog" ref={newBlogRef}>
+                  <NewBlog newBlogRef={newBlogRef} />
+                </Toggle>
+              ) : (
+                ''
+              )}
+              <br />
+              <Table striped>
+                <tbody>
+                  {blogs.map((blog) => (
+                    <tr key={blog.id}>
+                      <td>
+                        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </>
           }
         />
         <Route path="/users" element={<Users />} />
         <Route path="/users/:id" element={<User />} />
         <Route path="/blogs/:id" element={<Blog />} />
+        <Route
+          path="/login"
+          element={user ? <Navigate replace to="/" /> : <LoginForm />}
+        />
       </Routes>
     </div>
   )

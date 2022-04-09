@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../reducers/userReducer'
+import { Form, Button } from 'react-bootstrap'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
@@ -9,15 +10,14 @@ const LoginForm = () => {
   const [password, setPassword] = useState('')
   const handleLogin = (event) => {
     event.preventDefault()
-    console.log('logging in with', username, password)
     dispatch(loginUser(username, password, setUsername, setPassword))
   }
 
   return (
-    <form onSubmit={handleLogin}>
+    <Form onSubmit={handleLogin}>
       <div>
-        username
-        <input
+        <Form.Label>Username</Form.Label>
+        <Form.Control
           type="text"
           value={username}
           name="Username"
@@ -25,9 +25,10 @@ const LoginForm = () => {
           onChange={({ target }) => setUsername(target.value)}
         />
       </div>
+      <br />
       <div>
-        password
-        <input
+        <Form.Label>Password</Form.Label>
+        <Form.Control
           type="password"
           value={password}
           name="Password"
@@ -35,10 +36,11 @@ const LoginForm = () => {
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit" id="login-button">
+      <br />
+      <Button type="submit" id="login-button">
         login
-      </button>
-    </form>
+      </Button>
+    </Form>
   )
 }
 
