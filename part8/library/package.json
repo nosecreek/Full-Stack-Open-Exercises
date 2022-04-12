@@ -6,12 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=production node index.js",
-    "dev": "NODE_ENV=development node index.js"
+    "dev": "NODE_ENV=development nodemon index.js"
   },
   "author": "Dustin Lammiman",
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^3.6.7",
     "graphql": "^16.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
