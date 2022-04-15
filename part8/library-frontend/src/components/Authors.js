@@ -2,7 +2,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { useState } from "react";
 import { ALL_AUTHORS, UPDATE_AUTHOR } from "../queries";
 
-const BirthYear = () => {
+const BirthYear = (props) => {
   const [author, setAuthor] = useState("");
   const [year, setYear] = useState("");
   const [updateAuthor] = useMutation(UPDATE_AUTHOR, {
@@ -11,7 +11,7 @@ const BirthYear = () => {
 
   const updateYear = async (event) => {
     event.preventDefault();
-
+    console.log(author, year);
     updateAuthor({
       variables: {
         name: author,
@@ -29,11 +29,17 @@ const BirthYear = () => {
       <form onSubmit={updateYear}>
         Author Name:
         <br />
-        <input
-          type="text"
+        <select
           value={author}
           onChange={({ target }) => setAuthor(target.value)}
-        />
+        >
+          <option value=""></option>
+          {props.authors.map((a) => (
+            <option value={a.name} key={a.id}>
+              {a.name}
+            </option>
+          ))}
+        </select>
         <br />
         Birth Year:
         <br />
@@ -79,7 +85,7 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <BirthYear />
+      <BirthYear authors={authors} />
     </div>
   );
 };

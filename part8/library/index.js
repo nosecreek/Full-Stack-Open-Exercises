@@ -152,7 +152,7 @@ const resolvers = {
     editAuthor(root, args) {
       const author = authors.find((a) => a.name === args.name);
       if (!author) return null;
-      const newAuthor = { born: args.setBornTo, ...author };
+      const newAuthor = { ...author, born: args.setBornTo };
       authors = authors.map((a) => (a.id === newAuthor.id ? newAuthor : a));
       return newAuthor;
     },
