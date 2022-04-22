@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, gql, UserInputError } = require('apollo-server')
 const { v1: uuid } = require('uuid')
 const mongoose = require('mongoose')
 const Author = require('./models/authors')
@@ -84,24 +84,57 @@ const resolvers = {
       // if (!authors.find((a) => a.name === args.author)) {
       //   authors = authors.concat({ name: args.author, id: uuid() })
       // }
+      if (args.title.length < 4) {
+        throw new UserInputError('Title must be at least 4 characters long')
+      }
       let author = await Author.findOne({ name: args.author })
-      author = author ? author : await new Author({ name: args.author }).save()
+      try {
+        author = author
+          ? author
+          : await new Author({ name: args.author }).save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
+        })
+      }
       const book = new Book({ ...args, author: author })
-      return book.save()
+      try {
+        await book.save()
+      } catch (error) {
+        console.log('error')
+        throw new UserInputError(error.message, {
+          invalidArgs: args
+        })
+      }
+      return book
     },
     addAuthor: async (root, args) => {
       const author = new Author({ ...args })
       // authors = authors.concat(book)
-      return author.save()
+      try {
+        await author.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
+        })
+      }
+      return author
     },
     editAuthor: async (root, args) => {
       const author = await Author.findOne({ name: args.name })
       if (!author) return null
       const newAuthor = { name: author.name, born: args.setBornTo }
-      return await Author.findByIdAndUpdate(author.id, newAuthor, {
-        new: true,
-        runValidators: true
-      })
+      try {
+        await Author.findByIdAndUpdate(author.id, newAuthor, {
+          new: true,
+          runValidators: true
+        })
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
+        })
+      }
+      return newAuthor
     }
   }
 }
