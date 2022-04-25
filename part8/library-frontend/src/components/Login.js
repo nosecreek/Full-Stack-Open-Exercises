@@ -1,41 +1,41 @@
-import { useMutation } from "@apollo/client";
-import { useEffect, useState } from "react";
-import { LOGIN } from "../queries";
+import { useMutation } from '@apollo/client'
+import { useEffect, useState } from 'react'
+import { LOGIN } from '../queries'
 
 const Login = (props) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
   const [login, result] = useMutation(LOGIN, {
     onError: (e) => {
-      console.log(e.graphQLErrors[0].message);
-    },
-  });
+      console.log(e.graphQLErrors[0].message)
+    }
+  })
 
   useEffect(() => {
     if (result.data) {
-      const token = result.data.login.value;
-      props.setToken(token);
-      localStorage.setItem("library-user-token", token);
-      props.setPage("books");
+      const token = result.data.login.value
+      props.setToken(token)
+      localStorage.setItem('library-user-token', token)
+      props.setPage('books')
     }
-  }, [result.data]); // eslint-disable-line
+  }, [result.data]) // eslint-disable-line
 
   if (!props.show) {
-    return null;
+    return null
   }
 
   const handleLogin = async (event) => {
-    event.preventDefault();
-    login({ variables: { username, password } });
-  };
+    event.preventDefault()
+    login({ variables: { username, password } })
+  }
 
   return (
     <div>
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <div>
-          Username{" "}
+          Username{' '}
           <input
             type="text"
             value={username}
@@ -43,7 +43,7 @@ const Login = (props) => {
           />
         </div>
         <div>
-          Password{" "}
+          Password{' '}
           <input
             type="password"
             value={password}
@@ -53,7 +53,7 @@ const Login = (props) => {
         <input type="submit" />
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
