@@ -76,13 +76,14 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      // let theBooks = args.author
-      //   ? books.filter((b) => b.author === args.author)
-      //   : books
-      // theBooks = args.genre
-      //   ? theBooks.filter((b) => b.genres.includes(args.genre))
-      //   : theBooks
-      return Book.find({})
+      let filters = {}
+      if (args.genre) {
+        filters.genres = args.genre
+      }
+      // if (args.author) {
+      //   filters.author.name = author.genre
+      // }
+      return Book.find(filters)
     },
     allAuthors: async () => Author.find({}),
     me: (root, args, context) => {
