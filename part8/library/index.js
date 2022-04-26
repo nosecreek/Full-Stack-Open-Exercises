@@ -80,9 +80,10 @@ const resolvers = {
       if (args.genre) {
         filters.genres = args.genre
       }
-      // if (args.author) {
-      //   filters.author.name = author.genre
-      // }
+      if (args.author) {
+        let author = await Author.findOne({ name: args.author })
+        filters.author = author._id
+      }
       return Book.find(filters)
     },
     allAuthors: async () => Author.find({}),
