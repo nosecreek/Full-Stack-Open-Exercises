@@ -1,6 +1,6 @@
-import { useLazyQuery } from '@apollo/client'
+import { useLazyQuery, useSubscription } from '@apollo/client'
 import { useEffect, useState } from 'react'
-import { BOOKS_BY_GENRE } from '../queries'
+import { BOOKS_BY_GENRE, BOOK_ADDED } from '../queries'
 
 const Books = (props) => {
   const [genre, setGenre] = useState('')
@@ -8,6 +8,12 @@ const Books = (props) => {
     fetchPolicy: 'no-cache'
   })
   const [genres, setGenres] = useState([])
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      window.alert(`New book added - ${subscriptionData.data.bookAdded.title}`)
+    }
+  })
 
   useEffect(() => {
     if (props.show) {
