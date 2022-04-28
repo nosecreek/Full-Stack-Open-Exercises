@@ -83,6 +83,7 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
+      console.log('allbooks', args)
       let filters = {}
       if (args.genre) {
         filters.genres = args.genre

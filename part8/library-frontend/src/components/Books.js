@@ -1,19 +1,11 @@
-import { useLazyQuery, useSubscription } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
-import { BOOKS_BY_GENRE, BOOK_ADDED } from '../queries'
+import { ALL_BOOKS } from '../queries'
 
 const Books = (props) => {
   const [genre, setGenre] = useState('')
-  const [getBooks, { data: books, loading }] = useLazyQuery(BOOKS_BY_GENRE, {
-    fetchPolicy: 'no-cache'
-  })
+  const [getBooks, { data: books }] = useLazyQuery(ALL_BOOKS)
   const [genres, setGenres] = useState([])
-
-  useSubscription(BOOK_ADDED, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      window.alert(`New book added - ${subscriptionData.data.bookAdded.title}`)
-    }
-  })
 
   useEffect(() => {
     if (props.show) {
@@ -42,7 +34,7 @@ const Books = (props) => {
   if (!books) {
     return <div>loading...</div>
   }
-  console.log(books)
+
   return (
     <div>
       <h2>books</h2>
@@ -80,8 +72,8 @@ const Books = (props) => {
           </button>
         ))}
         <button
-          onClick={() => {
-            getBooks()
+          onClick={async () => {
+            await getBooks({ variables: { genre: '' } })
             setGenre('')
           }}
         >
