@@ -3,6 +3,7 @@ const { ApolloServer } = require('apollo-server-express')
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core')
 const { makeExecutableSchema } = require('@graphql-tools/schema')
 const { execute, subscribe } = require('graphql')
+const DataLoader = require('dataloader')
 const { SubscriptionServer } = require('subscriptions-transport-ws')
 const { PubSub } = require('graphql-subscriptions')
 const pubsub = new PubSub()
@@ -31,6 +32,13 @@ mongoose
   .catch((error) => {
     console.log('DB connection error:', error.message)
   })
+
+mongoose.set('debug', true)
+
+const batchBooks = async (keys) => {
+  const books = await Book.find({ author: keys })
+  return keys.map((key) => books.filter((book) => book.author.equals(key)))
+}
 
 const typeDefs = gql`
   type Book {
@@ -83,7 +91,6 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      console.log('allbooks', args)
       let filters = {}
       if (args.genre) {
         filters.genres = args.genre
@@ -94,16 +101,16 @@ const resolvers = {
       }
       return Book.find(filters)
     },
-    allAuthors: async () => Author.find({}),
+    allAuthors: async () => {
+      return Author.find({})
+    },
     me: (root, args, context) => {
       return context.currentUser
     }
   },
   Author: {
-    bookCount: async (root) => {
-      const books = await Book.find({
-        author: root._id
-      })
+    bookCount: async (root, args, { loaders }) => {
+      const books = await loaders.bookCount.load(root._id)
       return books.length
     }
   },
@@ -235,7 +242,12 @@ const start = async () => {
       if (auth && auth.toLowerCase().startsWith('bearer ')) {
         const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
         const currentUser = await User.findById(decodedToken.id)
-        return { currentUser }
+        return {
+          currentUser,
+          loaders: {
+            bookCount: new DataLoader((keys) => batchBooks(keys))
+          }
+        }
       }
     },
     plugins: [
