@@ -1,22 +1,34 @@
-const calculateBmi = (height: number, weight: number) => {
+interface BMI {
+  weight: number,
+  height: number,
+  bmi: string
+};
+
+export const calculateBmi = (height: number, weight: number): BMI => {
+  
   const bmi = weight / (height / 100) ** 2;
-  if (bmi < 16) {
-    return "Underweight (Severe thinness)";
-  } else if (bmi < 17) {
-    return "Underweight (Moderate thinness)";
-  } else if (bmi < 18.5) {
-    return "Underweight (Mild thinness)";
-  } else if (bmi < 25) {
-    return "Normal range";
-  } else if (bmi < 30) {
-    return "Overweight (Pre-obese)";
-  } else if (bmi < 35) {
-    return "Obese (Class I)";
-  } else if (bmi < 40) {
-    return "Obese (Class II)";
-  } else {
-    return "Obese (Class III)";
+  let output = {
+    weight: weight,
+    height: height,
+    bmi: "Obese (Class III)"
   }
+  if (bmi < 16) {
+    output.bmi = "Underweight (Severe thinness)";
+  } else if (bmi < 17) {
+    output.bmi = "Underweight (Moderate thinness)";
+  } else if (bmi < 18.5) {
+    output.bmi = "Underweight (Mild thinness)";
+  } else if (bmi < 25) {
+    output.bmi = "Normal range";
+  } else if (bmi < 30) {
+    output.bmi = "Overweight (Pre-obese)";
+  } else if (bmi < 35) {
+    output.bmi = "Obese (Class I)";
+  } else if (bmi < 40) {
+    output.bmi = "Obese (Class II)";
+  }
+
+  return output;
 };
 
 try {
