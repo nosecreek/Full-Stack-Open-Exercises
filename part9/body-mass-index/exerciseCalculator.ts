@@ -33,4 +33,22 @@ const calculateExercises = (dailyHours: number[], targetHours: number): Result =
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const a: number = Number(process.argv[2]);
+  if(isNaN(a)) {
+    throw new Error('Provided values were not numbers!');
+  }
+  const b: number[] = process.argv.filter((x,i) => i > 2).map((x) => {
+    if(isNaN(Number(x))) {
+        throw new Error('Provided values were not numbers!');
+      }
+    return Number(x);
+  });
+  console.log(calculateExercises(b, a));
+} catch (error: unknown) {
+  let errorMessage = 'Error! ';
+  if (error instanceof Error) {
+    errorMessage += error.message;
+  }
+  console.log(errorMessage);
+}
