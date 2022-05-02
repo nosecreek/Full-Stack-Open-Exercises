@@ -38,7 +38,7 @@ try {
   if(isNaN(a)) {
     throw new Error('Provided values were not numbers!');
   }
-  const b: number[] = process.argv.filter((x,i) => i > 2).map((x) => {
+  const b: number[] = process.argv.filter((_x,i) => i > 2).map((x) => {
     if(isNaN(Number(x))) {
         throw new Error('Provided values were not numbers!');
       }
