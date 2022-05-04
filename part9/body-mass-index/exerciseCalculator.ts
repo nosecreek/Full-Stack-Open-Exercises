@@ -6,7 +6,7 @@ interface Result {
   ratingDescription: string,
   target: number,
   average: number
-};
+}
 
 const calculateExercises = (dailyHours: number[], targetHours: number): Result => {
   const avg = dailyHours.reduce((a,b) => a+b) / dailyHours.length;
@@ -34,7 +34,7 @@ const calculateExercises = (dailyHours: number[], targetHours: number): Result =
 };
 
 try {
-  const a: number = Number(process.argv[2]);
+  const a = Number(process.argv[2]);
   if(isNaN(a)) {
     throw new Error('Provided values were not numbers!');
   }
