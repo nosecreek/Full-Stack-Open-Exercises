@@ -8,7 +8,7 @@ interface Result {
   average: number
 }
 
-const calculateExercises = (dailyHours: number[], targetHours: number): Result => {
+export const calculateExercises = (dailyHours: number[], targetHours: number): Result => {
   const avg = dailyHours.reduce((a,b) => a+b) / dailyHours.length;
   const success = avg/targetHours;
   
