@@ -1,4 +1,4 @@
-export interface DiagnosesEntry {
+export interface Diagnose {
   "code": string;
   "name": string;
   "latin"?: string;
