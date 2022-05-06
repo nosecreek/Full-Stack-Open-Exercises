@@ -5,7 +5,6 @@ const isString = (text: unknown): text is string => {
 };
 
 const parseName = (name: unknown): string => {
-  console.log(name);
   if(!name || !isString(name)) {
     throw new Error('Incorrect or missing name');
   }
