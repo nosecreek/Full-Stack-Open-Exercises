@@ -5,7 +5,15 @@ import toNewPatient from '../utils';
 const router = express.Router();
 
 router.get('/', (_req, res) => {
-  res.send(patientService.getNonSensitivePatient());
+  res.send(patientService.getNonSensitivePatients());
+});
+
+router.get('/:id', (req, res) => {
+  const patient = patientService.getPatient(req.params.id);
+  if(patient === undefined) {
+    res.status(400).send("Invalid ID or patient not found");
+  }
+  res.send(patient);
 });
 
 router.post('/', (req, res) => {
