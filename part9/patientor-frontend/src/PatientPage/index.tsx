@@ -2,14 +2,12 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
-import { useStateValue } from "../state";
+import { useStateValue, setPatient } from "../state";
 import { Patient } from "../types";
 
 const PatientPage = () => {
   const [{ patient }, dispatch] = useStateValue();
 
-  // const match = useMatch('/patient/:id');
-  // const patientId = match ? match.params.id : undefined;
   const patientId = useParams<{ id: string }>().id;
 
   const getPatient = async (id: string | undefined) => {
@@ -18,7 +16,7 @@ const PatientPage = () => {
     } else {
       try {
         const patient = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
-        dispatch({ type: "SET_PATIENT", payload: patient.data });
+        dispatch(setPatient(patient.data));
       } catch (e: unknown) {
         if (axios.isAxiosError(e)) {
           console.error(e?.response?.data || "Unrecognized axios error");
@@ -30,10 +28,10 @@ const PatientPage = () => {
   };
 
   useEffect(() => {
-    if(!patient) {
+    if(!patient || patient.id !== patientId) {
       void getPatient(patientId);
     }
-  }, [dispatch, patient]);
+  }, [dispatch, patientId]);
   
   if(patient) {
     return (
