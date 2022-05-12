@@ -8,6 +8,7 @@ import { useStateValue } from "./state";
 import { Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
+import PatientPage from './PatientPage';
 import { Typography } from "@material-ui/core";
 
 const App = () => {
@@ -28,6 +29,8 @@ const App = () => {
     void fetchPatientList();
   }, [dispatch]);
 
+
+
   return (
     <div className="App">
       <Router>
@@ -41,6 +44,7 @@ const App = () => {
           <Divider hidden />
           <Routes>
             <Route path="/" element={<PatientListPage />} />
+            <Route path="/patient/:id" element={<PatientPage />} />
           </Routes>
         </Container>
       </Router>
