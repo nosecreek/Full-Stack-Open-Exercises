@@ -6,7 +6,7 @@ import { useStateValue, setPatient } from "../state";
 import { Patient } from "../types";
 
 const PatientPage = () => {
-  const [{ patient }, dispatch] = useStateValue();
+  const [{ patient, diagnoses }, dispatch] = useStateValue();
 
   const patientId = useParams<{ id: string }>().id;
 
@@ -33,7 +33,7 @@ const PatientPage = () => {
     }
   }, [dispatch, patientId]);
   
-  if(patient) {
+  if(patient && diagnoses) {
     return (
       <div>
         <h2>{patient.name} ({patient.gender})</h2>
@@ -45,7 +45,9 @@ const PatientPage = () => {
             <div key={e.id}>{e.date} - {e.description}
               <ul>
                 {e.diagnosisCodes?.map(code => (
-                  <li key={code}>{code}</li>
+                  <li key={code}>{code} {
+                    diagnoses.filter(d => d.code === code)[0].name
+                  }</li>
                 ))}
               </ul>
             </div>
