@@ -1,4 +1,4 @@
-import { Gender, NewPatient } from "./types";
+import { Gender, NewPatient, Entry } from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -50,14 +50,32 @@ const parseOccupation = (occupation: unknown): string => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const toNewPatient = ({name, dateOfBirth, ssn, gender, occupation }: any): NewPatient => {
+const isEntry = (param: any): param is Entry => {
+  return param.type === "Hospital" || param.type === "HealthCheck" || param.type === "OccupationalHealthcare";
+};
+
+const parseEntries = (entries: unknown): Entry[] => {
+  if(!entries || !Array.isArray(entries)) {
+    throw new Error('Entry is not valid');
+  }
+  entries.forEach((e) => {
+    if(!isEntry(e)) {
+      throw new Error('Entry is not valid');
+    }
+  });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return entries;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const toNewPatient = ({name, dateOfBirth, ssn, gender, occupation, entries }: any): NewPatient => {
   const newEntry: NewPatient = {
     name: parseName(name),
     dateOfBirth: parseDate(dateOfBirth),
     ssn: parseSsn(ssn),
     gender: parseGender(gender),
     occupation: parseOccupation(occupation),
-    entries: []
+    entries: parseEntries(entries)
   };
   return newEntry;
 };
