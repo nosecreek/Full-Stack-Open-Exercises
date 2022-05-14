@@ -1,10 +1,13 @@
+// Define special omit for unions
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+
 export type Diagnose = {
   "code": string;
   "name": string;
   "latin"?: string;
 };
 
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   description: string;
   date: string;
@@ -45,6 +48,9 @@ export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
+
+// Define Entry without the 'id' property
+export type NewEntry = UnionOmit<Entry, 'id'>;
 
 export interface Patient {
   id: string,

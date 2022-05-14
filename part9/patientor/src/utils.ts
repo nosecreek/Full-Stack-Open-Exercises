@@ -1,4 +1,4 @@
-import { Gender, NewPatient, Entry } from "./types";
+import { Gender, NewPatient, Entry, NewEntry, BaseEntry, HealthCheckRating } from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -68,7 +68,7 @@ const parseEntries = (entries: unknown): Entry[] => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const toNewPatient = ({name, dateOfBirth, ssn, gender, occupation, entries }: any): NewPatient => {
+export const toNewPatient = ({name, dateOfBirth, ssn, gender, occupation, entries }: any): NewPatient => {
   const newEntry: NewPatient = {
     name: parseName(name),
     dateOfBirth: parseDate(dateOfBirth),
@@ -80,4 +80,91 @@ const toNewPatient = ({name, dateOfBirth, ssn, gender, occupation, entries }: an
   return newEntry;
 };
 
-export default toNewPatient;
+const parseString = (data: unknown): string => {
+  if(!data || !isString(data)) {
+    throw new Error('Incorrect or missing data');
+  }
+
+  return data;
+};
+
+const parseCodes = (codes: unknown): string[] | undefined => {
+  if(!codes || !Array.isArray(codes)) {
+    return undefined;
+  }
+  codes.forEach((c) => {
+    if(!isString(c)) {
+      throw new Error('Code is not valid');
+    }
+  });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return codes;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isHealthCheck = (param: any): param is HealthCheckRating => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  return Object.values(HealthCheckRating).includes(param);
+};
+
+const parseHealthCheck = (healthCheck: unknown): HealthCheckRating => {
+  if(healthCheck === undefined || !isHealthCheck(healthCheck)) {
+    throw new Error('Incorrect or missing Health Check value');
+  }
+  return healthCheck;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const parseSickLeave = (leave: any): { startDate: string; endDate: string; } | undefined => {
+  if(!leave || !leave.startDate || !leave.endDate) {
+    return undefined;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  if(!isString(leave.startDate) || !Date.parse(leave.startDate) || !isString(leave.endDate) || !Date.parse(leave.endDate)) {
+    throw new Error('Date is not valid');
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return leave;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const toNewEntry = (entry: any): NewEntry => {
+  const newEntry: Omit<BaseEntry, 'id'> = {
+    description: parseString(entry.description),
+    date: parseDate(entry.date),
+    specialist: parseName(entry.specialist),
+    diagnosisCodes: parseCodes(entry.diagnosisCodes)
+  };
+  switch (entry.type) {
+    case "Hospital":
+      return {
+        ...newEntry,
+        type: "Hospital",
+        discharge: {
+          date: parseDate(entry.discharge.date),
+          criteria: parseString(entry.discharge.criteria)
+        }
+      };
+      break;
+    case "HealthCheck":
+      return {
+        ...newEntry,
+        type: "HealthCheck",
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        healthCheckRating: parseHealthCheck(parseInt(entry.healthCheckRating))
+      };
+      break;
+    case "OccupationalHealthcare":
+      return {
+        ...newEntry,
+        type: "OccupationalHealthcare",
+        employerName: parseString(entry.employerName),
+        sickLeave: parseSickLeave(entry.sickLeave)
+      };
+      break;
+    default:
+      throw new Error (
+        "Incorrect or missing type value"
+      );
+  }
+};
