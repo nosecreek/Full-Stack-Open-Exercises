@@ -82,3 +82,10 @@ export const setDiagnoses = (diagnoses: Diagnosis[]): Action => {
     payload: diagnoses
   };
 };
+
+export const addEntry = (patient: Patient): Action => {
+  return {
+    type: "SET_PATIENT",
+    payload: patient
+  };
+};

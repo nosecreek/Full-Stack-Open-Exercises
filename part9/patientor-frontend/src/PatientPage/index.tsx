@@ -2,14 +2,37 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
-import { useStateValue, setPatient } from "../state";
+import { useStateValue, setPatient, addEntry } from "../state";
 import { Patient } from "../types";
 import PatientEntry from "../components/PatientEntry";
+import EntryForm, { EntryFormValues } from '../components/EntryForm';
 
 const PatientPage = () => {
   const [{ patient, diagnoses }, dispatch] = useStateValue();
 
   const patientId = useParams<{ id: string }>().id;
+
+  const submitNewEntry = async (values: EntryFormValues) => {
+    if(patientId === undefined) {
+      console.error('Patient is undefined');
+    } else {
+      try {
+        const { data: updatedPatient } = await axios.post<Patient>(
+          `${apiBaseUrl}/patients/${patientId}/entries`,
+          values
+        );
+        dispatch(addEntry(updatedPatient));
+      } catch (e: unknown) {
+        if (axios.isAxiosError(e)) {
+          console.error(e?.response?.data || "Unrecognized axios error");
+          // setError(String(e?.response?.data?.error) || "Unrecognized axios error");
+        } else {
+          console.error("Unknown error", e);
+          // setError("Unknown error");
+        }
+      }
+    }
+  };
 
   const getPatient = async (id: string | undefined) => {
     if(id === undefined) {
@@ -46,6 +69,7 @@ const PatientPage = () => {
             <PatientEntry key={e.id} entry={e} />
           ))}
         </div>
+        <EntryForm onSubmit={submitNewEntry} />
       </div>
     );
   } else {
